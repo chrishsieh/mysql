@@ -1,21 +1,11 @@
-FROM alpine:latest
+FROM mariadb:latest
 MAINTAINER ChurchCRM
 
-RUN apk add --update \
-        figlet \
-        jq \
-        mariadb \
-        mariadb-client \
-        ncurses && \
-        addgroup mysql mysql && \
-        mkdir /scripts
+RUN apt-get update \
+    && apt-get install -y jq \
+    && mkdir -p /scripts/pre-init.d/
 
-COPY ./presetup /usr/local/bin
-COPY ./start_cmd /usr/local/bin
-RUN chmod +x /usr/local/bin/presetup
-RUN chmod +x /usr/local/bin/start_cmd
+COPY ./startup /scripts/startup
+RUN chmod +x /scripts/startup
 
-EXPOSE 3306
-
-ENTRYPOINT ["/usr/local/bin/presetup"]
-CMD ["/usr/local/bin/start_cmd"]
+ENTRYPOINT ["/scripts/startup"]
