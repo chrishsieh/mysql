@@ -9,15 +9,4 @@ do
 	fi
 done
 
-/bin/bash /docker-entrypoint.sh
-
-# execute any pre-exec scripts
-for i in /scripts/pre-exec.d/*sh
-do
-	if [ -e "${i}" ]; then
-		echo "[i] pre-exec.d - processing $i"
-		. "${i}"
-	fi
-done
-
-/bin/bash mysqld
+/bin/bash /docker-entrypoint.sh mysqld
